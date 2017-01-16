@@ -343,8 +343,8 @@ void RBTree<T>::print() {
 	treeNode<T>* node = getFirst(root);
 
 	while (node) {
-		std::cout << node.data << std::endl;
-		node = node.next;
+		std::cout << node->data << std::endl;
+		node = node->next;
 	}
 }
 
