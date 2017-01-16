@@ -141,6 +141,10 @@ int main()
         {
             switch (evt.type)
             {
+            case sf::Event::Closed:
+                window.close();
+                break;
+
             case sf::Event::KeyPressed:
                 switch (evt.key.code)
                 {
