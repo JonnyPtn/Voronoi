@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(Voronoi)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/modules")
 
 find_package(SFML 2.4 COMPONENTS graphics system window)
