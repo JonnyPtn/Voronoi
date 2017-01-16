@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(Voronoi)
+project(voronoi)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -12,8 +12,6 @@ file(GLOB LIB_SOURCE "src/*.cpp")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${SFML_INCLUDE_DIR} include)
 
-add_library(Voronoi ${LIB_SOURCE})
+SET(CMAKE_DEBUG_POSTFIX -d)
 
-add_executable(SFML_Example "examples/SFML_Example.cpp")
-target_link_libraries(SFML_Example ${SFML_LIBRARIES} ${SFML_DEPENDENCIES}
-debug Debug/Voronoi optimized release/Voronoi)
+add_library(voronoi ${LIB_SOURCE})
