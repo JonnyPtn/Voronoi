@@ -1,5 +1,7 @@
 # Voronoi
 
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/l0yuxruih8f6rutc?svg=true)](https://ci.appveyor.com/project/JonnyPtn/voronoi)
+
 by Mark Dally
 
 https://github.com/mdally/Voronoi
