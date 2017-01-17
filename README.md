@@ -2,6 +2,8 @@
 
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/l0yuxruih8f6rutc?svg=true)](https://ci.appveyor.com/project/JonnyPtn/voronoi)
 
+Linux: [ ![Codeship Status for JonnyPtn/Voronoi](https://app.codeship.com/projects/993e2000-bef9-0134-6367-0ef15c5d34cb/status?branch=sfVoronoi)](https://app.codeship.com/projects/196443)
+
 by Mark Dally
 
 https://github.com/mdally/Voronoi
