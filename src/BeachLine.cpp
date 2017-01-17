@@ -276,7 +276,7 @@ double VoronoiDiagramGenerator::leftBreakpoint(treeNode<BeachSection>* section, 
 	double aby2 = (1 / pby2) - (1 / plby2);
 	double b = hl / plby2;
 	if (aby2 != 0) {
-		return (-b + sqrt(b*b - 2 * aby2*(hl*hl / (-2 * plby2) - lfocy + plby2 / 2 + rfocy - pby2 / 2))) / aby2 + rfocx;
+		return (-b + std::sqrt(b*b - 2 * aby2*(hl*hl / (-2 * plby2) - lfocy + plby2 / 2 + rfocy - pby2 / 2))) / aby2 + rfocx;
 	}
 
 	// if we get here, the two parabolas have the same 

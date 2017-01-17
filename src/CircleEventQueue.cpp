@@ -42,7 +42,7 @@ void CircleEventQueue::addCircleEvent(treeNode<BeachSection>* section) {
 	double y = (ax*hc - cx*ha) / d;
 	double ycenter = y + by;
 
-	CircleEvent circleEvent(section->data.site, x + bx, ycenter + sqrt(x*x + y*y), ycenter, section);
+	CircleEvent circleEvent(section->data.site, x + bx, ycenter + std::sqrt(x*x + y*y), ycenter, section);
 
 	// find insertion point in RB-tree: 
 	// circle events are ordered from smallest to largest

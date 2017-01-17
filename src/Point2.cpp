@@ -53,7 +53,7 @@ Point2 Point2::operator-(const sf::Vector2<double> & v) const {
 }
 
 double Point2::distanceTo(const Point2& p) const {
-    return sqrt((p[0] - x) * (p[0] - x) + 
+    return std::sqrt((p[0] - x) * (p[0] - x) + 
                 (p[1] - y) * (p[1] - y));
 }
 
@@ -63,7 +63,7 @@ double Point2::distanceToSquared(const Point2& p) const {
 }
 
 double Point2::distanceFromOrigin() const {
-    return sqrt(x * x + y * y);
+    return std::sqrt(x * x + y * y);
 }
 
 double Point2::distanceFromOriginSquared() const {

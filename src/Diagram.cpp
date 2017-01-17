@@ -338,7 +338,7 @@ void Diagram::closeCells(BoundingBox bbox) {
 			vz = (*halfEdges)[(iLeft + 1) % nHalfEdges]->startPoint();
 			// if end point is not equal to start point, we need to add the missing
 			// halfedge(s) up to vz
-			if (abs(va->x - vz->x) >= EPSILON || abs(va->y - vz->y) >= EPSILON) {
+			if (std::abs(va->x - vz->x) >= EPSILON || std::abs(va->y - vz->y) >= EPSILON) {
 				// find entry point:
 				bool foundEntryPoint = false;
 				bool finished = false;
