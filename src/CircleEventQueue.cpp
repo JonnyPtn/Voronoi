@@ -2,6 +2,8 @@
 #include "CircleEventQueue.h"
 #include "../include/Cell.h"
 
+#include <cmath>
+
 void CircleEventQueue::addCircleEvent(treeNode<BeachSection>* section) {
 	if (!section) return;
 	treeNode<BeachSection>* lSection = section->prev;
