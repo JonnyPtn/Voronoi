@@ -1,5 +1,5 @@
 #include "../include/VoronoiDiagramGenerator.h"
-#include "../include/Vector2.h"
+#include <SFML/System/Vector2.hpp>
 #include "Epsilon.h"
 #include <algorithm>
 #include <iostream>
@@ -110,7 +110,7 @@ bool halfEdgesCW(HalfEdge* e1, HalfEdge* e2) {
 Diagram* VoronoiDiagramGenerator::relax() {
 	std::vector<Point2> sites;
 	std::vector<Point2> verts;
-	std::vector<Vector2> vectors;
+	std::vector<sf::Vector2<double>> vectors;
 	//replace each site with its cell's centroid:
 	//    subdivide the cell into adjacent triangles
 	//    find those triangles' centroids (by averaging corners) 

@@ -1,7 +1,7 @@
 #ifndef _POINT2_H_
 #define _POINT2_H_
 
-#include "Vector2.h"
+#include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <sstream>
 
@@ -18,13 +18,13 @@ public:
 	const double &operator[](int n) const;
 	double &operator[](int n);
 
-    Point2& operator+=(const Vector2& v);
-    Point2& operator-=(const Vector2& v);
+    Point2& operator+=(const sf::Vector2<double>& v);
+    Point2& operator-=(const sf::Vector2<double>& v);
     Point2& operator*=(double s);
 
-    Vector2 operator-(const Point2 & p) const;
-    Point2 operator+(const Vector2 & v) const;
-    Point2 operator-(const Vector2 & v) const;
+    sf::Vector2<double> operator-(const Point2 & p) const;
+    Point2 operator+(const sf::Vector2<double> & v) const;
+    Point2 operator-(const sf::Vector2<double> & v) const;
 
     double distanceTo(const Point2& p) const;
     double distanceToSquared(const Point2& p) const;

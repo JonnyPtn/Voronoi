@@ -22,15 +22,15 @@ double& Point2::operator[](int n) {
 	return (&x)[n];
 }
 
-Point2& Point2::operator+=(const Vector2& v) {
-    x += v[0];
-    y += v[1];
+Point2& Point2::operator+=(const sf::Vector2<double>& v) {
+    x += v.x;
+    y += v.y;
     return *this;
 }
 
-Point2& Point2::operator-=(const Vector2& v) {
-    x -= v[0];
-    y -= v[1];
+Point2& Point2::operator-=(const sf::Vector2<double>& v) {
+    x -= v.x;
+    y -= v.y;
     return *this;
 }
 
@@ -40,16 +40,16 @@ Point2& Point2::operator*=(double s) {
     return *this;
 }
 
-Vector2 Point2::operator-(const Point2 & p) const {
-    return Vector2(x - p.x, y - p.y);
+sf::Vector2<double> Point2::operator-(const Point2 & p) const {
+    return sf::Vector2<double>(x - p.x, y - p.y);
 }
 
-Point2 Point2::operator+(const Vector2 & v) const {
-    return Point2(x + v[0], y + v[1]);
+Point2 Point2::operator+(const sf::Vector2<double> & v) const {
+    return Point2(x + v.x, y + v.y);
 }
 
-Point2 Point2::operator-(const Vector2 & v) const {
-    return Point2(x - v[0], y - v[1]);
+Point2 Point2::operator-(const sf::Vector2<double> & v) const {
+    return Point2(x - v.x, y - v.y);
 }
 
 double Point2::distanceTo(const Point2& p) const {
