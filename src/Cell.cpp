@@ -21,7 +21,7 @@ std::vector<Cell*> Cell::getNeighbors() {
 	return neighbors;
 }
 
-cellBoundingBox Cell::getBoundingBox() {
+sf::Rect<double> Cell::getBoundingBox() {
 	size_t edgeCount = halfEdges.size();
 	double xmin = std::numeric_limits<double>::infinity();
 	double ymin = xmin;
@@ -29,7 +29,8 @@ cellBoundingBox Cell::getBoundingBox() {
 	double ymax = xmax;
 
 	sf::Vector2<double>* vert;
-	while (edgeCount--) {
+	while (edgeCount--) 
+    {
 		vert = halfEdges[edgeCount]->startPoint();
 
 		double vx = vert->x;
@@ -41,7 +42,7 @@ cellBoundingBox Cell::getBoundingBox() {
 		if (vy > ymax) ymax = vy;
 	}
 
-	return cellBoundingBox(xmin, ymin, xmax, ymax);
+    return{ xmin, ymin, xmax - xmin, ymax - ymin };
 }
 
 // Return whether a point is inside, on, or outside the cell:

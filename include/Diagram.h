@@ -7,7 +7,6 @@
 #include "Cell.h"
 #include <set>
 
-struct BoundingBox;
 class Diagram {
 public:
 	std::vector<Cell*> cells;
@@ -32,10 +31,10 @@ private:
 	Edge* createEdge(Site* lSite, Site* rSite, sf::Vector2<double>* vertA, sf::Vector2<double>* vertB);
 	Edge* createBorderEdge(Site* lSite, sf::Vector2<double>* vertA, sf::Vector2<double>* vertB);
 
-	bool connectEdge(Edge* edge, BoundingBox bbox);
-	bool clipEdge(Edge* edge, BoundingBox bbox);
-	void clipEdges(BoundingBox bbox);
-	void closeCells(BoundingBox bbox);
+	bool connectEdge(Edge* edge, sf::Rect<double> bbox);
+	bool clipEdge(Edge* edge, sf::Rect<double> bbox);
+	void clipEdges(sf::Rect<double> bbox);
+	void closeCells(sf::Rect<double> bbox);
 	void finalize();
 };
 

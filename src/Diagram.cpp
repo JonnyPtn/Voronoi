@@ -45,7 +45,7 @@ Edge* Diagram::createBorderEdge(Site* lSite, sf::Vector2<double>* vertA, sf::Vec
 // return value:
 //   false: the dangling endpoint couldn't be connected
 //   true: the dangling endpoint could be connected
-bool Diagram::connectEdge(Edge* edge, BoundingBox bbox) {
+bool Diagram::connectEdge(Edge* edge, sf::Rect<double> bbox) {
 	// skip if end point already connected
 	sf::Vector2<double>* va = edge->vertA;
 	sf::Vector2<double>* vb = edge->vertB;
@@ -91,26 +91,26 @@ bool Diagram::connectEdge(Edge* edge, BoundingBox bbox) {
 	// special case: vertical line
 	if (ry == ly) {
 		// doesn't intersect with viewport
-		if (fx < bbox.xL || fx >= bbox.xR) { return false; }
+		if (fx < bbox.left || fx >= bbox.left + bbox.width) { return false; }
 		// downward
 		if (lx > rx) {
-			if (!va || va->y < bbox.yT) {
-				va = createVertex(fx, bbox.yT);
+			if (!va || va->y < bbox.top) {
+				va = createVertex(fx, bbox.top);
 			}
-			else if (va->y >= bbox.yB) {
+			else if (va->y >= bbox.top + bbox.height) {
 				return false;
 			}
-			vb = createVertex(fx, bbox.yB);
+			vb = createVertex(fx, bbox.top + bbox.height);
 		}
 		// upward
 		else {
-			if (!va || va->y > bbox.yB) {
-				va = createVertex(fx, bbox.yB);
+			if (!va || va->y > bbox.top + bbox.height) {
+				va = createVertex(fx, bbox.top + bbox.height);
 			}
-			else if (va->y < bbox.yT) {
+			else if (va->y < bbox.top) {
 				return false;
 			}
-			vb = createVertex(fx, bbox.yT);
+			vb = createVertex(fx, bbox.top);
 		}
 	}
 	// closer to vertical than horizontal, connect start point to the
@@ -118,23 +118,23 @@ bool Diagram::connectEdge(Edge* edge, BoundingBox bbox) {
 	else if (fm < -1.0 || fm > 1.0) {
 		// downward
 		if (lx > rx) {
-			if (!va || va->y < bbox.yT) {
-				va = createVertex((bbox.yT - fb) / fm, bbox.yT);
+			if (!va || va->y < bbox.top) {
+				va = createVertex((bbox.top - fb) / fm, bbox.top);
 			}
-			else if (va->y >= bbox.yB) {
+			else if (va->y >= bbox.top + bbox.height) {
 				return false;
 			}
-			vb = createVertex((bbox.yB - fb) / fm, bbox.yB);
+			vb = createVertex((bbox.top + bbox.height - fb) / fm, bbox.top + bbox.height);
 		}
 		// upward
 		else {
-			if (!va || va->y > bbox.yB) {
-				va = createVertex((bbox.yB - fb) / fm, bbox.yB);
+			if (!va || va->y > bbox.top + bbox.height) {
+				va = createVertex((bbox.top + bbox.height - fb) / fm, bbox.top + bbox.height);
 			}
-			else if (va->y < bbox.yT) {
+			else if (va->y < bbox.top) {
 				return false;
 			}
-			vb = createVertex((bbox.yT - fb) / fm, bbox.yT);
+			vb = createVertex((bbox.top - fb) / fm, bbox.top);
 		}
 	}
 	// closer to horizontal than vertical, connect start point to the
@@ -142,23 +142,23 @@ bool Diagram::connectEdge(Edge* edge, BoundingBox bbox) {
 	else {
 		// rightward
 		if (ly < ry) {
-			if (!va || va->x < bbox.xL) {
-				va = createVertex(bbox.xL, fm*bbox.xL + fb);
+			if (!va || va->x < bbox.left) {
+				va = createVertex(bbox.left, fm*bbox.left + fb);
 			}
-			else if (va->x >= bbox.xR) {
+			else if (va->x >= bbox.left + bbox.width) {
 				return false;
 			}
-			vb = createVertex(bbox.xR, fm*bbox.xR + fb);
+			vb = createVertex(bbox.left + bbox.width, fm*bbox.left + bbox.width + fb);
 		}
 		// leftward
 		else {
-			if (!va || va->x > bbox.xR) {
-				va = createVertex(bbox.xR, fm*bbox.xR + fb);
+			if (!va || va->x > bbox.left + bbox.width) {
+				va = createVertex(bbox.left + bbox.width, fm*bbox.left + bbox.width + fb);
 			}
-			else if (va->x < bbox.xL) {
+			else if (va->x < bbox.left) {
 				return false;
 			}
-			vb = createVertex(bbox.xL, fm*bbox.xL + fb);
+			vb = createVertex(bbox.left, fm*bbox.left + fb);
 		}
 	}
 	edge->vertA = va;
@@ -171,7 +171,7 @@ bool Diagram::connectEdge(Edge* edge, BoundingBox bbox) {
 //   Liang-Barsky function by Daniel White
 //   http://www.skytopia.com/project/articles/compsci/clipping.html
 // A bit modified to minimize code paths
-bool Diagram::clipEdge(Edge* edge, BoundingBox bbox) {
+bool Diagram::clipEdge(Edge* edge, sf::Rect<double> bbox) {
 	double ax = edge->vertA->x;
 	double ay = edge->vertA->y;
 	double bx = edge->vertB->x;
@@ -181,7 +181,7 @@ bool Diagram::clipEdge(Edge* edge, BoundingBox bbox) {
 	double dx = bx - ax;
 	double dy = by - ay;
 	// left
-	double q = ax - bbox.xL;
+	double q = ax - bbox.left;
 	if (dx == 0 && q<0) { return false; }
 	double r = -q / dx;
 	if (dx < 0) {
@@ -193,7 +193,7 @@ bool Diagram::clipEdge(Edge* edge, BoundingBox bbox) {
 		if (r > t0) { t0 = r; }
 	}
 	// right
-	q = bbox.xR - ax;
+	q = bbox.left + bbox.width - ax;
 	if (dx == 0 && q<0) { return false; }
 	r = q / dx;
 	if (dx<0) {
@@ -205,7 +205,7 @@ bool Diagram::clipEdge(Edge* edge, BoundingBox bbox) {
 		if (r<t1) { t1 = r; }
 	}
 	// top
-	q = ay - bbox.yT;
+	q = ay - bbox.top;
 	if (dy == 0 && q<0) { return false; }
 	r = -q / dy;
 	if (dy<0) {
@@ -217,7 +217,7 @@ bool Diagram::clipEdge(Edge* edge, BoundingBox bbox) {
 		if (r>t0) { t0 = r; }
 	}
 	// bottom        
-	q = bbox.yB - ay;
+	q = bbox.top + bbox.height - ay;
 	if (dy == 0 && q<0) { return false; }
 	r = q / dy;
 	if (dy<0) {
@@ -258,7 +258,7 @@ bool Diagram::clipEdge(Edge* edge, BoundingBox bbox) {
 }
 
 // Connect/cut edges at bounding box
-void Diagram::clipEdges(BoundingBox bbox) {
+void Diagram::clipEdges(sf::Rect<double> bbox) {
 	// connect all dangling edges to bounding box
 	// or get rid of them if it can't be done
 	std::vector<Edge*> toRemove;
@@ -310,7 +310,7 @@ void Diagram::clipEdges(BoundingBox bbox) {
 // The cells are bound by the supplied bounding box.
 // Each cell refers to its associated site, and a list
 // of halfedges ordered counterclockwise.
-void Diagram::closeCells(BoundingBox bbox) {
+void Diagram::closeCells(sf::Rect<double> bbox) {
 	sf::Vector2<double>* va;
 	sf::Vector2<double>* vb;
 	sf::Vector2<double>* vz;
@@ -345,10 +345,10 @@ void Diagram::closeCells(BoundingBox bbox) {
 				bool lastBorderSegment = false;
 
 				// walk downward along left side
-				if (eq_withEpsilon(va->x, bbox.xL) && lt_withEpsilon(va->y, bbox.yB)) {
+				if (eq_withEpsilon(va->x, bbox.left) && lt_withEpsilon(va->y, bbox.top + bbox.height)) {
 					foundEntryPoint = true;
-					lastBorderSegment = eq_withEpsilon(vz->x, bbox.xL);
-					vb = lastBorderSegment ? vz : createVertex(bbox.xL, lastBorderSegment ? vz->y : bbox.yB);
+					lastBorderSegment = eq_withEpsilon(vz->x, bbox.left);
+					vb = lastBorderSegment ? vz : createVertex(bbox.left, lastBorderSegment ? vz->y : bbox.top + bbox.height);
 					edge = createBorderEdge(&cell->site, va, vb);
 					++iLeft;
 					halfEdges->insert(halfEdges->begin() + iLeft, halfEdgePool.newElement(edge, &cell->site, nullptr));
@@ -358,10 +358,10 @@ void Diagram::closeCells(BoundingBox bbox) {
 				}
 
 				// walk rightward along bottom side
-				if ((!finished && foundEntryPoint) || (eq_withEpsilon(va->y, bbox.yB) && lt_withEpsilon(va->x, bbox.xR))) {
+				if ((!finished && foundEntryPoint) || (eq_withEpsilon(va->y, bbox.top + bbox.height) && lt_withEpsilon(va->x, bbox.left + bbox.width))) {
 					foundEntryPoint = true;
-					lastBorderSegment = eq_withEpsilon(vz->y, bbox.yB);
-					vb = lastBorderSegment ? vz : createVertex(lastBorderSegment ? vz->x : bbox.xR, bbox.yB);
+					lastBorderSegment = eq_withEpsilon(vz->y, bbox.top + bbox.height);
+					vb = lastBorderSegment ? vz : createVertex(lastBorderSegment ? vz->x : bbox.left + bbox.width, bbox.top + bbox.height);
 					edge = createBorderEdge(&cell->site, va, vb);
 					++iLeft;
 					halfEdges->insert(halfEdges->begin() + iLeft, halfEdgePool.newElement(edge, &cell->site, nullptr));
@@ -371,10 +371,10 @@ void Diagram::closeCells(BoundingBox bbox) {
 				}
 
 				// walk upward along right side
-				if ((!finished && foundEntryPoint) || (eq_withEpsilon(va->x, bbox.xR) && gt_withEpsilon(va->y, bbox.yT))) {
+				if ((!finished && foundEntryPoint) || (eq_withEpsilon(va->x, bbox.left + bbox.width) && gt_withEpsilon(va->y, bbox.top))) {
 					foundEntryPoint = true;
-					lastBorderSegment = eq_withEpsilon(vz->x, bbox.xR);
-					vb = lastBorderSegment ? vz : createVertex(bbox.xR, lastBorderSegment ? vz->y : bbox.yT);
+					lastBorderSegment = eq_withEpsilon(vz->x, bbox.left + bbox.width);
+					vb = lastBorderSegment ? vz : createVertex(bbox.left + bbox.width, lastBorderSegment ? vz->y : bbox.top);
 					edge = createBorderEdge(&cell->site, va, vb);
 					++iLeft;
 					halfEdges->insert(halfEdges->begin() + iLeft, halfEdgePool.newElement(edge, &cell->site, nullptr));
@@ -384,9 +384,9 @@ void Diagram::closeCells(BoundingBox bbox) {
 				}
 
 				// walk leftward along top side
-				if ((!finished && foundEntryPoint) || (eq_withEpsilon(va->y, bbox.yT) && gt_withEpsilon(va->x, bbox.xL))) {
-					lastBorderSegment = eq_withEpsilon(vz->y, bbox.yT);
-					vb = lastBorderSegment ? vz : createVertex(lastBorderSegment ? vz->x : bbox.xL, bbox.yT);
+				if ((!finished && foundEntryPoint) || (eq_withEpsilon(va->y, bbox.top) && gt_withEpsilon(va->x, bbox.left))) {
+					lastBorderSegment = eq_withEpsilon(vz->y, bbox.top);
+					vb = lastBorderSegment ? vz : createVertex(lastBorderSegment ? vz->x : bbox.left, bbox.top);
 					edge = createBorderEdge(&cell->site, va, vb);
 					++iLeft;
 					halfEdges->insert(halfEdges->begin() + iLeft, halfEdgePool.newElement(edge, &cell->site, nullptr));
@@ -396,8 +396,8 @@ void Diagram::closeCells(BoundingBox bbox) {
 
 					// walk downward along left side
 					if (!finished) {
-						lastBorderSegment = eq_withEpsilon(vz->x, bbox.xL);
-						vb = lastBorderSegment ? vz : createVertex(bbox.xL, lastBorderSegment ? vz->y : bbox.yB);
+						lastBorderSegment = eq_withEpsilon(vz->x, bbox.left);
+						vb = lastBorderSegment ? vz : createVertex(bbox.left, lastBorderSegment ? vz->y : bbox.top + bbox.height);
 						edge = createBorderEdge(&cell->site, va, vb);
 						++iLeft;
 						halfEdges->insert(halfEdges->begin() + iLeft, halfEdgePool.newElement(edge, &cell->site, nullptr));
@@ -408,8 +408,8 @@ void Diagram::closeCells(BoundingBox bbox) {
 
 					// walk rightward along bottom side
 					if (!finished) {
-						lastBorderSegment = eq_withEpsilon(vz->y, bbox.yB);
-						vb = lastBorderSegment ? vz : createVertex(lastBorderSegment ? vz->x : bbox.xR, bbox.yB);
+						lastBorderSegment = eq_withEpsilon(vz->y, bbox.top + bbox.height);
+						vb = lastBorderSegment ? vz : createVertex(lastBorderSegment ? vz->x : bbox.left + bbox.width, bbox.top + bbox.height);
 						edge = createBorderEdge(&cell->site, va, vb);
 						++iLeft;
 						halfEdges->insert(halfEdges->begin() + iLeft, halfEdgePool.newElement(edge, &cell->site, nullptr));
@@ -420,8 +420,8 @@ void Diagram::closeCells(BoundingBox bbox) {
 
 					// walk upward along right side
 					if (!finished) {
-						lastBorderSegment = eq_withEpsilon(vz->x, bbox.xR);
-						vb = lastBorderSegment ? vz : createVertex(bbox.xR, lastBorderSegment ? vz->y : bbox.yT);
+						lastBorderSegment = eq_withEpsilon(vz->x, bbox.left + bbox.width);
+						vb = lastBorderSegment ? vz : createVertex(bbox.left + bbox.width, lastBorderSegment ? vz->y : bbox.top);
 						edge = createBorderEdge(&cell->site, va, vb);
 						++iLeft;
 						halfEdges->insert(halfEdges->begin() + iLeft, halfEdgePool.newElement(edge, &cell->site, nullptr));

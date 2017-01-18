@@ -28,7 +28,7 @@ bool pointComparator(sf::Vector2<double>* a, sf::Vector2<double>* b) {
 	else return false;
 }
 
-Diagram* VoronoiDiagramGenerator::compute(std::vector<sf::Vector2<double>>& sites, BoundingBox bbox) {
+Diagram* VoronoiDiagramGenerator::compute(std::vector<sf::Vector2<double>>& sites, sf::Rect<double> bbox) {
 	siteEventQueue = new std::vector<sf::Vector2<double>*>();
 	boundingBox = bbox;
 

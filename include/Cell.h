@@ -2,17 +2,8 @@
 #define _CELL_H_
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include <vector>
-
-struct cellBoundingBox {
-	double xmin;
-	double ymin;
-	double width;
-	double height;
-
-	cellBoundingBox(double _xmin, double _ymin, double _xmax, double _ymax) :
-		xmin(_xmin), ymin(_ymin), width(_xmax - _xmin), height(_ymax - _ymin) {};
-};
 
 struct Cell;
 struct Site {
@@ -33,7 +24,7 @@ struct Cell {
 	Cell(sf::Vector2<double> _site) : site(_site, this), closeMe(false) {};
 
 	std::vector<Cell*> getNeighbors();
-	cellBoundingBox getBoundingBox();
+	sf::Rect<double> getBoundingBox();
 
 	// Return whether a point is inside, on, or outside the cell:
 	//   -1: point is outside the perimeter of the cell

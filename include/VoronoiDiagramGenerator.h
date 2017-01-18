@@ -7,29 +7,18 @@
 #include "Diagram.h"
 #include <vector>
 
-struct BoundingBox {
-	double xL;
-	double xR;
-	double yB;
-	double yT;
-
-	BoundingBox() {};
-	BoundingBox(double xmin, double xmax, double ymin, double ymax) :
-		xL(xmin), xR(xmax), yB(ymin), yT(ymax) {};
-};
-
 class VoronoiDiagramGenerator {
 public:
 	VoronoiDiagramGenerator() : circleEventQueue(nullptr), siteEventQueue(nullptr), beachLine(nullptr) {};
 	~VoronoiDiagramGenerator() {};
 
-	Diagram* compute(std::vector<sf::Vector2<double>>& sites, BoundingBox bbox);
+	Diagram* compute(std::vector<sf::Vector2<double>>& sites, sf::Rect<double> bbox);
 	Diagram* relax();
 private:
 	Diagram* diagram;
 	CircleEventQueue* circleEventQueue;
 	std::vector<sf::Vector2<double>*>* siteEventQueue;
-	BoundingBox	boundingBox;
+	sf::Rect<double>	boundingBox;
 
 	void printBeachLine();
 
