@@ -23,12 +23,12 @@ public:
 	VoronoiDiagramGenerator() : circleEventQueue(nullptr), siteEventQueue(nullptr), beachLine(nullptr) {};
 	~VoronoiDiagramGenerator() {};
 
-	Diagram* compute(std::vector<Point2>& sites, BoundingBox bbox);
+	Diagram* compute(std::vector<sf::Vector2<double>>& sites, BoundingBox bbox);
 	Diagram* relax();
 private:
 	Diagram* diagram;
 	CircleEventQueue* circleEventQueue;
-	std::vector<Point2*>* siteEventQueue;
+	std::vector<sf::Vector2<double>*>* siteEventQueue;
 	BoundingBox	boundingBox;
 
 	void printBeachLine();

@@ -1,4 +1,4 @@
-#include "../include/Point2.h"
+#include <SFML/System/Vector2.hpp>
 #include "CircleEventQueue.h"
 #include "../include/Cell.h"
 
@@ -10,9 +10,9 @@ void CircleEventQueue::addCircleEvent(treeNode<BeachSection>* section) {
 	treeNode<BeachSection>* rSection = section->next;
 	if (!lSection || !rSection) { return; }
 
-	Point2 lSite = lSection->data.site->p;
-	Point2 cSite = section->data.site->p;
-	Point2 rSite = rSection->data.site->p;
+	sf::Vector2<double> lSite = lSection->data.site->p;
+	sf::Vector2<double> cSite = section->data.site->p;
+	sf::Vector2<double> rSite = rSection->data.site->p;
 
 	// If site of left beachsection is same as site of
 	// right beachsection, there can't be convergence

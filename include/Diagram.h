@@ -12,7 +12,7 @@ class Diagram {
 public:
 	std::vector<Cell*> cells;
 	std::vector<Edge*> edges;
-	std::vector<Point2*> vertices;
+	std::vector<sf::Vector2<double>*> vertices;
 
 	void printDiagram();
 private:
@@ -20,17 +20,17 @@ private:
 
 	std::set<Cell*> tmpCells;
 	std::set<Edge*> tmpEdges;
-	std::set<Point2*> tmpVertices;
+	std::set<sf::Vector2<double>*> tmpVertices;
 
 	MemoryPool<Cell> cellPool;
 	MemoryPool<Edge> edgePool;
 	MemoryPool<HalfEdge> halfEdgePool;
-	MemoryPool<Point2> vertexPool;
+	MemoryPool<sf::Vector2<double>> vertexPool;
 
-	Point2* createVertex(double x, double y);
-	Cell* createCell(Point2 site);
-	Edge* createEdge(Site* lSite, Site* rSite, Point2* vertA, Point2* vertB);
-	Edge* createBorderEdge(Site* lSite, Point2* vertA, Point2* vertB);
+	sf::Vector2<double>* createVertex(double x, double y);
+	Cell* createCell(sf::Vector2<double> site);
+	Edge* createEdge(Site* lSite, Site* rSite, sf::Vector2<double>* vertA, sf::Vector2<double>* vertB);
+	Edge* createBorderEdge(Site* lSite, sf::Vector2<double>* vertA, sf::Vector2<double>* vertB);
 
 	bool connectEdge(Edge* edge, BoundingBox bbox);
 	bool clipEdge(Edge* edge, BoundingBox bbox);

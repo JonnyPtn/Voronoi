@@ -1,7 +1,7 @@
 #ifndef _CELL_H_
 #define _CELL_H_
 
-#include "Point2.h"
+#include <SFML/System/Vector2.hpp>
 #include <vector>
 
 struct cellBoundingBox {
@@ -16,11 +16,11 @@ struct cellBoundingBox {
 
 struct Cell;
 struct Site {
-	Point2 p;
+    sf::Vector2<double> p;
 	Cell* cell;
 
 	Site() {};
-	Site(Point2 _p, Cell* _cell) : p(_p), cell(_cell) {};
+	Site(sf::Vector2<double> _p, Cell* _cell) : p(_p), cell(_cell) {};
 };
 
 struct HalfEdge;
@@ -30,7 +30,7 @@ struct Cell {
 	bool closeMe;
 
 	Cell() : closeMe(false) {};
-	Cell(Point2 _site) : site(_site, this), closeMe(false) {};
+	Cell(sf::Vector2<double> _site) : site(_site, this), closeMe(false) {};
 
 	std::vector<Cell*> getNeighbors();
 	cellBoundingBox getBoundingBox();

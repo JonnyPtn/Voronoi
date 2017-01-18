@@ -16,14 +16,14 @@ HalfEdge::HalfEdge(Edge* e, Site* lSite, Site* rSite) {
 		angle = atan2(rSite->p.y - lSite->p.y, rSite->p.x - lSite->p.x);
 	}
 	else {
-		Point2& va = *(e->vertA);
-		Point2& vb = *(e->vertB);
+		sf::Vector2<double>& va = *(e->vertA);
+		sf::Vector2<double>& vb = *(e->vertB);
 
 		angle = (e->lSite == lSite) ? atan2(vb.x - va.x, va.y - vb.y) : atan2(va.x - vb.x, vb.y - va.y);
 	}
 }
 
-void Edge::setStartPoint(Site* _lSite, Site* _rSite, Point2* vertex) {
+void Edge::setStartPoint(Site* _lSite, Site* _rSite, sf::Vector2<double>* vertex) {
 	if (!vertA && !vertB) {
 		vertA = vertex;
 		lSite = _lSite;
@@ -37,6 +37,6 @@ void Edge::setStartPoint(Site* _lSite, Site* _rSite, Point2* vertex) {
 	}
 }
 
-void Edge::setEndPoint(Site* _lSite, Site* _rSite, Point2* vertex) {
+void Edge::setEndPoint(Site* _lSite, Site* _rSite, sf::Vector2<double>* vertex) {
 	setStartPoint(_rSite, _lSite, vertex);
 }

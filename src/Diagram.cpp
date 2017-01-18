@@ -6,21 +6,21 @@
 using std::cout;
 using std::endl;
 
-Point2* Diagram::createVertex(double x, double y) {
-	Point2* vert = vertexPool.newElement(Point2(x, y));
+sf::Vector2<double>* Diagram::createVertex(double x, double y) {
+	sf::Vector2<double>* vert = vertexPool.newElement(sf::Vector2<double>(x, y));
 	tmpVertices.insert(vert);
 
 	return vert;
 }
 
-Cell* Diagram::createCell(Point2 site) {
+Cell* Diagram::createCell(sf::Vector2<double> site) {
 	Cell* cell = cellPool.newElement(site);
 	tmpCells.insert(cell);
 
 	return cell;
 }
 
-Edge* Diagram::createEdge(Site* lSite, Site* rSite, Point2* vertA, Point2* vertB) {
+Edge* Diagram::createEdge(Site* lSite, Site* rSite, sf::Vector2<double>* vertA, sf::Vector2<double>* vertB) {
 	Edge* edge = edgePool.newElement(Edge(lSite, rSite));
 	tmpEdges.insert(edge);
 
@@ -33,7 +33,7 @@ Edge* Diagram::createEdge(Site* lSite, Site* rSite, Point2* vertA, Point2* vertB
 	return edge;
 }
 
-Edge* Diagram::createBorderEdge(Site* lSite, Point2* vertA, Point2* vertB) {
+Edge* Diagram::createBorderEdge(Site* lSite, sf::Vector2<double>* vertA, sf::Vector2<double>* vertB) {
 	Edge* edge = edgePool.newElement(Edge(lSite, nullptr, vertA, vertB));
 	tmpEdges.insert(edge);
 
@@ -47,8 +47,8 @@ Edge* Diagram::createBorderEdge(Site* lSite, Point2* vertA, Point2* vertB) {
 //   true: the dangling endpoint could be connected
 bool Diagram::connectEdge(Edge* edge, BoundingBox bbox) {
 	// skip if end point already connected
-	Point2* va = edge->vertA;
-	Point2* vb = edge->vertB;
+	sf::Vector2<double>* va = edge->vertA;
+	sf::Vector2<double>* vb = edge->vertB;
 	if (vb) { return true; }
 
 	// make local copy for speed
@@ -311,9 +311,9 @@ void Diagram::clipEdges(BoundingBox bbox) {
 // Each cell refers to its associated site, and a list
 // of halfedges ordered counterclockwise.
 void Diagram::closeCells(BoundingBox bbox) {
-	Point2* va;
-	Point2* vb;
-	Point2* vz;
+	sf::Vector2<double>* va;
+	sf::Vector2<double>* vb;
+	sf::Vector2<double>* vz;
 	Edge* edge;
 	std::vector<HalfEdge*>* halfEdges;
 
@@ -449,7 +449,7 @@ void Diagram::finalize() {
 	tmpEdges.clear();
 
 	vertices.reserve(tmpVertices.size());
-	for (Point2* v : tmpVertices) {
+	for (sf::Vector2<double>* v : tmpVertices) {
 		vertices.push_back(v);
 	}
 	tmpVertices.clear();
@@ -458,29 +458,30 @@ void Diagram::finalize() {
 void Diagram::printDiagram() {
 	if (cells.size()) {
 		for (Cell* c : cells) {
-			cout << c->site.p << endl;
+			cout << c->site.p.x << " " << c->site.p.y << "\n" << c << endl;
 			for (HalfEdge* e : c->halfEdges) {
-				cout << '\t' << *e->startPoint() << endl;
+				cout << '\t' << e->startPoint()->x << " " << e->startPoint()->y << "\n" << endl;
 			}
 			cout << endl;
 		}
 		for (Edge* e : edges) {
-			cout << *e->vertA << " -> " << *e->vertB << endl;
+			cout << e->vertA->x << " " << e->vertA->y  << "\n" << " -> " << 
+                e->vertB->x << " " << e->vertB->y << "\n" << endl;
 		}
 		cout << endl;
 	}
 	else {
 		for (Cell* c : tmpCells) {
-			cout << c->site.p << endl;
+			cout << c->site.p.x << " " << c->site.p.y << "\n" << endl;
 			for (HalfEdge* e : c->halfEdges) {
-				Point2* pS = e->startPoint();
-				Point2* pE = e->endPoint();
+				sf::Vector2<double>* pS = e->startPoint();
+				sf::Vector2<double>* pE = e->endPoint();
 
 				cout << '\t';
-				if (pS) cout << *pS;
+				if (pS) cout << pS->x << " " << pS->y << "\n";
 				else cout << "null";
 				cout << " -> ";
-				if (pE) cout << *pE;
+				if (pE) cout << pE->x << " " << pE->y << "\n";
 				else cout << "null";
 				cout << endl;
 			}
@@ -488,12 +489,12 @@ void Diagram::printDiagram() {
 		}
 		for (Edge* e : tmpEdges) {
 			if (e->vertA)
-				cout << *e->vertA;
+				cout << e->vertA->x << " " << e->vertA->y << "\n";
 			else
 				cout << "null";
 			cout << " -> ";
 			if (e->vertB)
-				cout << *e->vertB;
+				cout << e->vertB->x << " " << e->vertB->y << "\n";
 			else
 				cout << "null";
 			cout << endl;

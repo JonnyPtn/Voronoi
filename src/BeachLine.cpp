@@ -1,5 +1,5 @@
 #include "../include/VoronoiDiagramGenerator.h"
-#include "../include/Point2.h"
+#include <SFML/System/Vector2.hpp>
 #include "BeachLine.h"
 #include "../include/Cell.h"
 #include "Epsilon.h"
@@ -109,9 +109,9 @@ treeNode<BeachSection>* VoronoiDiagramGenerator::addBeachSection(Site* site) {
 		// http://mathforum.org/library/drmath/view/55002.html
 		Site* lSite = lSection->data.site;
 		Site* rSite = rSection->data.site;
-		Point2& lP = lSite->p;
-		Point2& sP = site->p;
-		Point2& rP = rSite->p;
+		sf::Vector2<double>& lP = lSite->p;
+		sf::Vector2<double>& sP = site->p;
+		sf::Vector2<double>& rP = rSite->p;
 		double ax = lP.x;
 		double ay = lP.y;
 		double bx = sP.x - ax;
@@ -121,7 +121,7 @@ treeNode<BeachSection>* VoronoiDiagramGenerator::addBeachSection(Site* site) {
 		double d = 2 * (bx*cy - by*cx);
 		double hb = bx*bx + by*by;
 		double hc = cx*cx + cy*cy;
-		Point2* vertex = diagram->createVertex((cy*hb - by*hc) / d + ax, (bx*hc - cx*hb) / d + ay);
+		sf::Vector2<double>* vertex = diagram->createVertex((cy*hb - by*hc) / d + ax, (bx*hc - cx*hb) / d + ay);
 
 		// one transition disappears
 		rSection->data.edge->setStartPoint(lSite, rSite, vertex);
@@ -170,7 +170,7 @@ void VoronoiDiagramGenerator::removeBeachSection(treeNode<BeachSection>* section
 	CircleEvent circle = section->data.circleEvent->data;
 	double x = circle.x;
 	double y = circle.yCenter;
-	Point2* vertex = diagram->createVertex(x, y);
+	sf::Vector2<double>* vertex = diagram->createVertex(x, y);
 	treeNode<BeachSection>* prev = section->prev;
 	treeNode<BeachSection>* next = section->next;
 	std::vector<treeNode<BeachSection>*> disappearingTransitions;
@@ -249,7 +249,7 @@ void VoronoiDiagramGenerator::removeBeachSection(treeNode<BeachSection>* section
 // calculate the left break point of a particular beach section,
 // given a particular sweep line height
 double VoronoiDiagramGenerator::leftBreakpoint(treeNode<BeachSection>* section, double directrix) {
-	Point2 site = section->data.site->p;
+	sf::Vector2<double> site = section->data.site->p;
 	double rfocx = site.x;
 	double rfocy = site.y;
 	double pby2 = rfocy - directrix;
@@ -292,7 +292,7 @@ double VoronoiDiagramGenerator::rightBreakpoint(treeNode<BeachSection>* section,
 		return leftBreakpoint(rSection, directrix);
 	}
 
-	Point2 site = section->data.site->p;
+	sf::Vector2<double> site = section->data.site->p;
 	if (site.y == directrix) {
 		return site.x;
 	}

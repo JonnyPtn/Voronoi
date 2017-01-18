@@ -11,14 +11,14 @@ void VoronoiDiagramGenerator::printBeachLine() {
 	treeNode<BeachSection>* section = beachLine->getFirst(beachLine->getRoot());
 
 	while (section) {
-		cout << section->data.site->p << endl;
+		cout << section->data.site->p.x << " " << section->data.site->p.y << endl;
 		section = section->next;
 	}
-	if(section) cout << section->data.site->p << endl;
+	if(section) cout << section->data.site->p.x << " " << section->data.site->p.y << endl;
 	cout << endl << endl;
 }
 
-bool pointComparator(Point2* a, Point2* b) {
+bool pointComparator(sf::Vector2<double>* a, sf::Vector2<double>* b) {
 	double r = b->y - a->y;
 	if (r < 0) return true;
 	else if (r == 0) {
@@ -28,8 +28,8 @@ bool pointComparator(Point2* a, Point2* b) {
 	else return false;
 }
 
-Diagram* VoronoiDiagramGenerator::compute(std::vector<Point2>& sites, BoundingBox bbox) {
-	siteEventQueue = new std::vector<Point2*>();
+Diagram* VoronoiDiagramGenerator::compute(std::vector<sf::Vector2<double>>& sites, BoundingBox bbox) {
+	siteEventQueue = new std::vector<sf::Vector2<double>*>();
 	boundingBox = bbox;
 
 	for (size_t i = 0; i < sites.size(); ++i) {
@@ -48,7 +48,7 @@ Diagram* VoronoiDiagramGenerator::compute(std::vector<Point2>& sites, BoundingBo
 	std::sort(siteEventQueue->begin(), siteEventQueue->end(), pointComparator);
 
 	// process queue
-	Point2* site = siteEventQueue->empty() ? nullptr : siteEventQueue->back();
+	sf::Vector2<double>* site = siteEventQueue->empty() ? nullptr : siteEventQueue->back();
 	if (!siteEventQueue->empty()) siteEventQueue->pop_back();
 	treeNode<CircleEvent>* circle;
 
@@ -108,8 +108,8 @@ bool halfEdgesCW(HalfEdge* e1, HalfEdge* e2) {
 }
 
 Diagram* VoronoiDiagramGenerator::relax() {
-	std::vector<Point2> sites;
-	std::vector<Point2> verts;
+	std::vector<sf::Vector2<double>> sites;
+	std::vector<sf::Vector2<double>> verts;
 	std::vector<sf::Vector2<double>> vectors;
 	//replace each site with its cell's centroid:
 	//    subdivide the cell into adjacent triangles
@@ -127,7 +127,7 @@ Diagram* VoronoiDiagramGenerator::relax() {
 			vectors[i] = *c->halfEdges[i]->startPoint() - verts[0];
 		}
 
-		Point2 centroid(0.0, 0.0);
+		sf::Vector2<double> centroid(0.0, 0.0);
 		double totalArea = 0.0;
 		for (size_t i = 1; i < edgeCount-1; ++i) {
 			double area = (vectors[i+1].x*vectors[i].y - vectors[i+1].y*vectors[i].x)/2;

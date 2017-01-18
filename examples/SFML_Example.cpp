@@ -18,7 +18,7 @@ int relax = 0;
 bool startOver = true;
 bool relaxForever = false;
 
-bool sitesOrdered(const Point2& s1, const Point2& s2) {
+bool sitesOrdered(const sf::Vector2<double>& s1, const sf::Vector2<double>& s2) {
 	if (s1.y < s2.y)
 		return true;
 	if (s1.y == s2.y && s1.x < s2.x)
@@ -27,14 +27,14 @@ bool sitesOrdered(const Point2& s1, const Point2& s2) {
 	return false;
 }
 
-void genRandomSites(std::vector<Point2>& sites, BoundingBox& bbox, unsigned int dimension, unsigned int numSites) {
+void genRandomSites(std::vector<sf::Vector2<double>>& sites, BoundingBox& bbox, unsigned int dimension, unsigned int numSites) {
 	bbox = BoundingBox(0, dimension, dimension, 0);
-	std::vector<Point2> tmpSites;
+	std::vector<sf::Vector2<double>> tmpSites;
 
 	tmpSites.reserve(numSites);
 	sites.reserve(numSites);
 
-	Point2 s;
+    sf::Vector2<double> s;
 
 	srand(std::clock());
 	for (unsigned int i = 0; i < numSites; ++i) {
@@ -46,7 +46,7 @@ void genRandomSites(std::vector<Point2>& sites, BoundingBox& bbox, unsigned int 
 	//remove any duplicates that exist
 	std::sort(tmpSites.begin(), tmpSites.end(), sitesOrdered);
 	sites.push_back(tmpSites[0]);
-	for (Point2& s : tmpSites) {
+	for (sf::Vector2<double>& s : tmpSites) {
 		if (s != sites.back()) sites.push_back(s);
 	}
 }
@@ -64,7 +64,7 @@ int main()
 	std::unique_ptr<Diagram> diagram;
 	
     //sites used for generation
-	std::vector<Point2>* sites;
+	std::vector<sf::Vector2<double>>* sites;
 
     //maximum bounds for the diagram
 	BoundingBox bbox;
@@ -87,7 +87,7 @@ int main()
         for (auto c : diagram->cells)
         {
             //red point for each cell site
-            Point2& p = c->site.p;
+            sf::Vector2<double>& p = c->site.p;
             vertices.push_back({{ static_cast<float>(p.x),static_cast<float>(p.y)}, sf::Color::Red});
         }
 
@@ -95,8 +95,8 @@ int main()
         {
             if (e->vertA && e->vertB)
             {
-                Point2& p1 = *e->vertA;
-                Point2& p2 = *e->vertB;
+                sf::Vector2<double>& p1 = *e->vertA;
+                sf::Vector2<double>& p2 = *e->vertB;
 
                 //white line for each edge
                 vertices.push_back({ { static_cast<float>(p1.x),static_cast<float>(p1.y) },sf::Color::White });
@@ -116,7 +116,7 @@ int main()
         startOver = false;
         relaxForever = false;
         relax = 0;
-        sites = new std::vector<Point2>();
+        sites = new std::vector<sf::Vector2<double>>();
         std::cout << "How many points? ";
         std::cin >> nPoints;
         genRandomSites(*sites, bbox, dimension, nPoints);
