@@ -27,8 +27,7 @@ bool sitesOrdered(const sf::Vector2<double>& s1, const sf::Vector2<double>& s2) 
 	return false;
 }
 
-void genRandomSites(std::vector<sf::Vector2<double>>& sites, BoundingBox& bbox, unsigned int dimension, unsigned int numSites) {
-	bbox = BoundingBox(0, dimension, dimension, 0);
+void genRandomSites(std::vector<sf::Vector2<double>>& sites, sf::Rect<double>& bbox, unsigned int dimension, unsigned int numSites) {
 	std::vector<sf::Vector2<double>> tmpSites;
 
 	tmpSites.reserve(numSites);
@@ -67,7 +66,7 @@ int main()
 	std::vector<sf::Vector2<double>>* sites;
 
     //maximum bounds for the diagram
-	BoundingBox bbox;
+	sf::Rect<double> bbox(0,0,windowSize,windowSize);
 
     //used to measure generation time
     sf::Clock timer;
@@ -133,6 +132,7 @@ int main()
     //now open the window
     sf::RenderWindow window;
     window.create(sf::VideoMode(windowSize, windowSize), "Voronoi");
+    window.setVerticalSyncEnabled(true);
 
 	while (window.isOpen()) 
     {
