@@ -15,3 +15,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${SFML_INCLUDE_DIR} include)
 SET(CMAKE_DEBUG_POSTFIX -d)
 
 add_library(voronoi ${LIB_SOURCE})
+
+add_executable(sfvoronoi_example examples/SFML_Example.cpp)
+
+target_link_libraries(sfvoronoi_example debug voronoi-d optimized voronoi ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
