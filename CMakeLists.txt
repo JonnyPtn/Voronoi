@@ -18,4 +18,4 @@ add_library(voronoi ${LIB_SOURCE})
 
 add_executable(sfvoronoi_example examples/SFML_Example.cpp)
 
-target_link_libraries(sfvoronoi_example debug voronoi-d optimized voronoi ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+target_link_libraries(sfvoronoi_example voronoi ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
